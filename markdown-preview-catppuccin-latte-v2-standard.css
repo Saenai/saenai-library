@@ -14,7 +14,8 @@
  * - textBlockQuote.background: #e6e9ef
  * - textBlockQuote.border: #dce0e8
  * - textCodeBlock.background: #e6e9ef
- * - editorLink.activeForeground: #8839ef
+ * - textLink.foreground: #1e66f5
+ * - textLink.activeForeground: #04a5e5
  * - Preview body font family, font size, and line height are intentionally
  *   left to VS Code settings: markdown.preview.fontFamily,
  *   markdown.preview.fontSize, and markdown.preview.lineHeight.
@@ -27,7 +28,7 @@
  * - heading.5.markdown: #209fb5
  * - heading.6.markdown: #7287fd
  * - markup.bold / markup.italic: #d20f39
- * - link text follows editor.foreground; active/hover follows editorLink.activeForeground
+ * - preview links follow textLink.foreground / textLink.activeForeground
  * - markup.underline.link: #1e66f5
  * - markup.link / link title/reference: #7287fd
  * - markup.inline.raw / markup.raw.block: #40a02b
@@ -76,9 +77,9 @@
   --md-selection-soft: #7c7f9333;
   --md-line-highlight: #4c4f6912;
   --md-focus: #8839ef66;
-  --md-link: var(--ctp-text);
+  --md-link: var(--ctp-blue);
   --md-link-visited: var(--ctp-lavender);
-  --md-link-hover: var(--ctp-mauve);
+  --md-link-hover: var(--ctp-sky);
   --md-table-row: #eff1f5;
   --md-table-row-alt: #e6e9ef66;
   --md-table-row-hover: #ccd0da66;
@@ -134,7 +135,7 @@ p {
 
 a {
   color: var(--md-link);
-  text-decoration-color: #4c4f6966;
+  text-decoration-color: #1e66f566;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
@@ -142,7 +143,7 @@ a {
 a:hover,
 a:focus {
   color: var(--md-link-hover);
-  text-decoration-color: #8839ef99;
+  text-decoration-color: #04a5e599;
 }
 
 a:visited {
@@ -153,7 +154,7 @@ a:visited {
 a:visited:hover,
 a:visited:focus {
   color: var(--md-link-hover);
-  text-decoration-color: #8839ef99;
+  text-decoration-color: #04a5e599;
 }
 
 a:focus-visible,
