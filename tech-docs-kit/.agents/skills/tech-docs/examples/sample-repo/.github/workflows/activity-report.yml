@@ -1,0 +1,33 @@
+name: Activity report
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build report
+        env:
+          REPORT_DIR: ${{ runner.temp }}/report
+        run: bash scripts/build-report.sh data/records.csv
+      - name: Publish report
+        uses: actions/upload-artifact@v4
+        with:
+          name: activity-report
+          path: ${{ runner.temp }}/report/report.txt
+          if-no-files-found: error
+
+  validate:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download report
+        uses: actions/download-artifact@v4
+        with:
+          name: activity-report
+      - name: Require nonempty report
+        run: test -s report.txt
