@@ -8,7 +8,7 @@ Example: [activity-report.runbook.md](../../examples/sample-repo/docs/runbooks/a
 
 ## Skeleton
 
-The first four sections are required, in this order. `Undo` is required when a step changes data or deploys something.
+The first four sections are required, in this order. Section names in other languages are in [sections.json](../sections.json). `Undo` is required when a step changes data or deploys something.
 
 ```markdown
 # {{Task}} — Runbook

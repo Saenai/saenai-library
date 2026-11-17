@@ -1,6 +1,6 @@
 ---
 name: tech-docs
-description: Write or review technical Markdown documents in English (designs As-Is or To-Be, runbooks, ADRs, references, READMEs) grounded in the repository's source. Use when asked to document, design, specify or explain code, Shell scripts, CI workflows or a planned change, or to review such a document.
+description: Write or review technical Markdown documents in any language (designs As-Is or To-Be, runbooks, ADRs, references, READMEs) grounded in the repository's source. Use when asked to document, design, specify or explain code, Shell scripts, CI workflows or a planned change, or to review such a document.
 ---
 
 # Technical documents
@@ -19,14 +19,15 @@ Choose by what the reader needs to do after reading. An explicit type or path fr
 | look up parameters, config keys, env vars, formats | [reference](references/types/reference.md) | `docs/reference/<name>.reference.md` |
 | get oriented in a repository or directory | [readme](references/types/readme.md) | `README.md` in that directory |
 
-If a request mixes needs, write the main document and link to the others (or offer them) rather than merging them into one.
+If a request mixes needs, write the main document and link to the others rather than merging them into one.
 
 ## 2. Read
 
 - Always: [writing.md](references/writing.md) and the type file.
+- [sections.json](references/sections.json) for the section names in the document's language.
 - Shell scripts or CI workflow YAML: [shell-workflow.md](references/shell-workflow.md).
 - Before drawing: [diagrams.md](references/diagrams.md).
-- The finished example of the type in [examples/sample-repo/](examples/sample-repo/), if there is one. Match its density and tone.
+- The finished example of the type in [examples/sample-repo/](examples/sample-repo/), if there is one. Match its density and tone. [examples/sample-repo-ja/](examples/sample-repo-ja/) has the As-Is design in Japanese; for other types and languages, keep the English example's density and structure.
 
 ## 3. Inspect
 
@@ -37,6 +38,8 @@ Do not run business scripts, trigger CI, deploy, or change source unless the use
 ## 4. Write
 
 Follow the type's skeleton. Write for a reader who has the repository but not this conversation.
+
+Write in the language the user names. Without one, use the language of the documents already next to the output path; without those, the language of the request. Section headings, header labels and `None.` take that language's names from sections.json. For a language sections.json does not list, translate the English names.
 
 When a fact the reader needs cannot be established (a business rule, an external system's behavior, a missing requirement), do not guess: record it as an open question and finish the rest.
 

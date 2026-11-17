@@ -1,6 +1,6 @@
 # tech-docs kit
 
-An Agent Skill for technical Markdown documents that a person can read quickly and an agent can use reliably: designs (As-Is and To-Be), runbooks, ADRs, references and READMEs.
+An Agent Skill for technical Markdown documents that a person can read quickly and an agent can use reliably: designs (As-Is and To-Be), runbooks, ADRs, references and READMEs. It writes in the language you ask for; section names for English and Japanese are built in.
 
 ## Install
 
@@ -41,7 +41,13 @@ In Claude Code, use `/tech-docs` instead of `$tech-docs`.
 python .agents/skills/tech-docs/scripts/check_doc.py docs/
 ```
 
-It reports broken links, line ranges past the end of a file, missing anchors, leftover placeholders, unknown Mermaid diagram types, and missing or misordered sections for the document type. Whether the content is right is for review to decide.
+It reports broken links, line ranges past the end of a file, missing anchors, leftover placeholders, unknown Mermaid diagram types, and missing, unknown or misordered sections for the document type. Whether the content is right is for review to decide.
+
+## Languages
+
+The document language is the one you name; otherwise the language of the documents already next to the output path; otherwise the language of your request. Identifiers, paths, commands and messages stay as in the source.
+
+`references/sections.json` maps each section to its heading in English and Japanese. To add a language, add one entry under `names` with the same keys. For a language that is not listed, the agent translates the English headings and the checker skips the section check for that document.
 
 ## What is inside
 
@@ -50,11 +56,13 @@ It reports broken links, line ranges past the end of a file, missing anchors, le
 | `SKILL.md` | Workflow and choice of document type |
 | `references/writing.md` | Rules for every document |
 | `references/types/` | One file per type: purpose, skeleton, what to leave out |
+| `references/sections.json` | Required and optional sections per type, and their headings per language |
 | `references/shell-workflow.md` | What to look for in Shell scripts and CI workflow YAML |
 | `references/diagrams.md` | When to draw, and which Mermaid diagram |
 | `examples/sample-repo/` | A small repository with a finished document of each main type |
+| `examples/sample-repo-ja/` | The As-Is design of the same repository in Japanese |
 | `scripts/check_doc.py` | Structural checker (Python 3.8+, standard library only) |
 
-To adapt it to your team, edit the examples first. Agents copy the examples more faithfully than they follow rules.
+To adapt it to your team, edit the examples first. Agents copy the examples more faithfully than they follow rules. If most of your documents are in a language other than English, add a finished example in that language.
 
 If your organization requires a fixed template (Word, Excel), write the Markdown first and transfer the content.

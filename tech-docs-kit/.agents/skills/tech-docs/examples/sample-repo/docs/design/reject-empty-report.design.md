@@ -2,7 +2,7 @@
 
 Source: [build-report.sh](../../scripts/build-report.sh), [activity-report.yml](../../.github/workflows/activity-report.yml)
 Requirements: [report-validation.md](../../requirements/report-validation.md)
-Basis: source as of this commit and the requirements. The change is not implemented yet.
+Basis: source at commit 4f2c9ab and the requirements. The change is not implemented yet.
 
 ## Summary
 
@@ -30,12 +30,7 @@ Other interfaces are unchanged.
 
 ## Behavior
 
-| ID | Condition | Behavior |
-| --- | --- | --- |
-| B1 | `report.txt` is empty after `awk` | print `No active records` to stderr, exit 3 |
-| B2 | `report.txt` is not empty | exit 0, as today |
-
-Append to the end of `build-report.sh`, after the `awk` line ([L13](../../scripts/build-report.sh#L13)):
+Append to the end of `build-report.sh`, after the `awk` line:
 
 ```bash
 if [[ ! -s "$output_dir/report.txt" ]]; then
@@ -54,12 +49,12 @@ On exit 3, the `Build report` step fails, `Publish report` is skipped, and `vali
 
 ## Verification
 
-| Check | Covers | Expected | Status |
-| --- | --- | --- | --- |
-| Run the script on a CSV with no `active` row | B1 | exit 3; stderr `No active records` | Planned |
-| Run it on `data/records.csv` | B2 | exit 0; `report.txt` is `A100`, `A102` | Planned |
-| Run it with a path that does not exist | — | exit 2, as today | Planned |
-| Dispatch the workflow with no `active` row | B1 | `build` fails at `Build report`; upload and `validate` skipped | Planned |
+| Check | Expected | Status |
+| --- | --- | --- |
+| Run the script on a CSV with no `active` row | exit 3; stderr `No active records` | Planned |
+| Run it on `data/records.csv` | exit 0; `report.txt` is `A100`, `A102` | Planned |
+| Run it with a path that does not exist | exit 2, as today | Planned |
+| Dispatch the workflow with no `active` row | `build` fails at `Build report`; upload and `validate` skipped | Planned |
 
 ## Open Questions
 

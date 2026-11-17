@@ -1,0 +1,60 @@
+{
+  "types": {
+    "design": {
+      "order": ["summary", "context", "interfaces", "behavior", "decisions", "verification", "open_questions"],
+      "required": ["summary", "interfaces", "behavior", "open_questions"]
+    },
+    "runbook": {
+      "order": ["before_you_start", "steps", "check_the_result", "troubleshooting", "undo"],
+      "required": ["before_you_start", "steps", "check_the_result", "troubleshooting"]
+    },
+    "adr": {
+      "order": ["context", "decision", "consequences", "alternatives_considered"],
+      "required": ["context", "decision", "consequences", "alternatives_considered"]
+    }
+  },
+  "names": {
+    "en": {
+      "summary": "Summary",
+      "context": "Context",
+      "interfaces": "Interfaces",
+      "behavior": "Behavior",
+      "decisions": "Decisions",
+      "verification": "Verification",
+      "open_questions": "Open Questions",
+      "before_you_start": "Before you start",
+      "steps": "Steps",
+      "check_the_result": "Check the result",
+      "troubleshooting": "Troubleshooting",
+      "undo": "Undo",
+      "decision": "Decision",
+      "consequences": "Consequences",
+      "alternatives_considered": "Alternatives Considered",
+      "source": "Source",
+      "requirements": "Requirements",
+      "basis": "Basis",
+      "none": "None."
+    },
+    "ja": {
+      "summary": "概要",
+      "context": "背景",
+      "interfaces": "インターフェース",
+      "behavior": "動作",
+      "decisions": "設計判断",
+      "verification": "検証",
+      "open_questions": "未解決事項",
+      "before_you_start": "事前確認",
+      "steps": "手順",
+      "check_the_result": "結果の確認",
+      "troubleshooting": "トラブルシューティング",
+      "undo": "元に戻す",
+      "decision": "決定",
+      "consequences": "影響",
+      "alternatives_considered": "検討した代替案",
+      "source": "ソース",
+      "requirements": "要件",
+      "basis": "根拠",
+      "none": "なし。"
+    }
+  }
+}

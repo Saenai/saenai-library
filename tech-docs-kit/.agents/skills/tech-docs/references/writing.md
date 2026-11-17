@@ -20,7 +20,7 @@ Do not restate code line by line. Link to it.
 
 ## Basis and uncertainty
 
-State the basis once, near the top: what was read, and what, if anything, was run. For example: `Basis: source as of this commit; scripts not executed.`
+State the basis once, near the top: what was read, and what, if anything, was run. For example: `Basis: source at commit 4f2c9ab; scripts not executed.` Name the commit, so a later reader can tell whether the source has moved since.
 
 Everything not otherwise marked then rests on that basis. Do not repeat it per statement, and do not write disclaimers about what the document does not claim. Mark only the specific statements that rest on something weaker (documentation of an action you could not read, an inference), and collect real unknowns in one place.
 
@@ -41,14 +41,15 @@ Everything not otherwise marked then rests on that basis. Do not repeat it per s
 ## Words
 
 - Exact identifiers in backticks: `REPORT_DIR`, `needs: build`, `exit 3`.
-- Name things. Avoid "it", "this step", "the above" when the referent is not in the same sentence.
+- Name things. Avoid pronouns and pointers ("it", "this step", "the above", 「これ」「上記」) when the referent is not in the same sentence.
 - One term per concept throughout. Define a domain term at first use.
-- Short, direct sentences. Present tense for behavior. "Must" only for real requirements.
-- English. Identifiers, paths, commands and messages exactly as in the source.
+- Short, direct sentences. Describe behavior as what happens now. Requirement wording ("must", 「〜すること」) only for real requirements.
+- One language per document, in the plain register that technical documents in that language use. Identifiers, paths, commands and messages stay exactly as in the source, untranslated.
 
 ## Links
 
-- Link to source with paths relative to the document. Add a line range when pointing at specific behavior: `[build-report.sh](../../scripts/build-report.sh#L7-L10)`.
+- Link to source with paths relative to the document. Point at specific behavior by naming its identifier next to the link: a function, a step name, a variable, a message, an exit code. Do not use line numbers; they point at something else as soon as the source changes.
+- State each fact once within a document. An exit code listed under Interfaces is not listed again under Behavior.
 - Link instead of copying. Each fact (a schema, a parameter list, a requirement) has one home; other documents link to it.
 
 ## Leave out
@@ -60,3 +61,4 @@ Everything not otherwise marked then rests on that basis. Do not repeat it per s
 - Document status, approvals, revision history: Git and pull requests hold those.
 - Secret values. Refer to a secret by its name and role.
 - Placeholders and TODOs. Write `None.` for a required section that is genuinely empty.
+- Sections the type marks as optional, when they would be empty.

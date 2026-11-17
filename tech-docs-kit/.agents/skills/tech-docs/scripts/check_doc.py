@@ -7,25 +7,24 @@ PATH is a file, or a directory whose *.md files are all checked.
 The document type comes from --type, otherwise from the file name:
 *.design.md, *.runbook.md, *.reference.md, adr/NNNN-*.md, README.md.
 
-Checks: one title, required sections for the type, local links and line
-ranges, in-page anchors, Mermaid diagram types, leftover placeholders and
-lifecycle fields. Content correctness is for review, not for this script.
+Checks: one title, sections for the type (required ones present, no others,
+in order), local links and line ranges, in-page anchors, Mermaid diagram
+types, leftover placeholders and lifecycle fields. Section names per language
+come from references/sections.json; a document whose headings match no listed
+language skips the section check. Content correctness is for review, not for
+this script.
 Exit status 1 if anything is reported.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-REQUIRED = {
-    "design": ["Summary", "Context", "Interfaces", "Behavior", "Decisions", "Verification", "Open Questions"],
-    "runbook": ["Before you start", "Steps", "Check the result", "Troubleshooting"],
-    "adr": ["Context", "Decision", "Consequences", "Alternatives Considered"],
-}
-OPTIONAL = {"runbook": ["Undo"]}
+SECTIONS = json.loads((Path(__file__).resolve().parent.parent / "references" / "sections.json").read_text(encoding="utf-8"))
 TYPES = ["design", "runbook", "adr", "reference", "readme"]
 
 FRONT_MATTER = re.compile(r"\A---\n.*?\n---[ \t]*\n", re.S)
@@ -34,8 +33,8 @@ INLINE_CODE = re.compile(r"`+[^`\n]*`+")
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\)")
 MERMAID = re.compile(r"^(flowchart|graph|sequenceDiagram|stateDiagram(-v2)?|erDiagram|classDiagram|gantt|journey|gitGraph|mindmap|timeline|pie|quadrantChart)\b")
 PLACEHOLDER = re.compile(r"\{\{|\b(TODO|TBD|FIXME)\b")
-LIFECYCLE = re.compile(r"^\W*(Status|Approved by|Approval|Revision|Last reviewed|Reviewed by)\W*:", re.I)
-LIFECYCLE_HEADING = re.compile(r"^#{2,6} +(change ?log|revision history|change history|document history)\s*$", re.I)
+LIFECYCLE = re.compile(r"^\W*(Status|Approved by|Approval|Revision|Last reviewed|Reviewed by|ステータス|承認者|承認|改訂|レビュー者)\W*[:：]", re.I)
+LIFECYCLE_HEADING = re.compile(r"^#{2,6} +(change ?log|revision history|change history|document history|改訂履歴|変更履歴|更新履歴)\s*$", re.I)
 
 
 def doc_type(path: Path, override: str | None) -> str | None:
@@ -88,22 +87,32 @@ def check(path: Path, override: str | None = None) -> list[tuple[int, str]]:
 
     sections = [(i, m.group(1)) for i, line in enumerate(lines, 1) if (m := re.match(r"^## +(.+?)\s*#*\s*$", line))]
     kind = doc_type(path, override)
-    if kind in REQUIRED:
-        required = REQUIRED[kind]
-        allowed = required + OPTIONAL.get(kind, [])
+    spec = SECTIONS["types"].get(kind)
+    names = None
+    if spec:
+        headings = {name for _, name in sections}
+        hits = {lang: sum(table[key] in headings for key in spec["order"]) for lang, table in SECTIONS["names"].items()}
+        lang = max(hits, key=hits.get)
+        names = SECTIONS["names"][lang] if hits[lang] else None
+        if not names:
+            print(f"{path}: headings match no language in sections.json; section check skipped")
+    if names:
+        allowed = [names[key] for key in spec["order"]]
+        required = [names[key] for key in spec["required"]]
         for line_no, name in sections:
             if name not in allowed:
                 problems.append((line_no, f"'## {name}' is not a {kind} section (use ### inside a section)"))
-        present = [name for _, name in sections if name in required]
-        if present != required:
-            missing = [name for name in required if name not in present]
-            detail = f"missing: {', '.join(missing)}" if missing else "wrong order"
-            problems.append((1, f"a {kind} needs: {', '.join(required)} ({detail})"))
+        present = [name for _, name in sections if name in allowed]
+        missing = [name for name in required if name not in present]
+        if missing:
+            problems.append((1, f"a {kind} needs: {', '.join(required)} (missing: {', '.join(missing)})"))
+        elif present != [name for name in allowed if name in present]:
+            problems.append((1, f"{kind} sections go in this order: {', '.join(allowed)}"))
         raw_lines = text.splitlines()
         for k, (line_no, name) in enumerate(sections):
             end = sections[k + 1][0] - 1 if k + 1 < len(sections) else len(raw_lines)
             if not "\n".join(raw_lines[line_no:end]).strip():
-                problems.append((line_no, f"'## {name}' is empty; write 'None.' if there is nothing to say"))
+                problems.append((line_no, f"'## {name}' is empty; write '{names['none']}' or remove the section"))
 
     own_anchors = None
     for line_no, line in enumerate(lines, 1):

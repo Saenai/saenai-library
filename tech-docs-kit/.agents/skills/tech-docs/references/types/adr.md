@@ -12,7 +12,7 @@ When a choice is hard to reverse, affects more than one component, or will be qu
 
 ## Skeleton
 
-All sections are required, in this order.
+All sections are required, in this order. Section names in other languages are in [sections.json](../sections.json).
 
 ```markdown
 # NNNN. {{Decision as a short statement}}

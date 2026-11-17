@@ -4,11 +4,11 @@ Explains how a component works (**As-Is**) or specifies a change (**To-Be**). Fi
 
 File: `docs/design/<name>.design.md`
 
-Examples: [As-Is](../../examples/sample-repo/docs/design/activity-report.design.md), [To-Be](../../examples/sample-repo/docs/design/reject-empty-report.design.md)
+Examples: [As-Is](../../examples/sample-repo/docs/design/activity-report.design.md), [As-Is in Japanese](../../examples/sample-repo-ja/docs/design/activity-report.design.md), [To-Be](../../examples/sample-repo/docs/design/reject-empty-report.design.md)
 
 ## Skeleton
 
-All `##` sections are required, in this order. Write `None.` when one is genuinely empty. Use `###` subsections freely.
+Summary, Interfaces, Behavior and Open Questions are required. Context, Decisions and Verification appear only when they have content. Keep this order. Write `None.` when a required section is genuinely empty. Use `###` subsections freely.
 
 ```markdown
 # {{Component}} — Design (As-Is | To-Be)
@@ -26,19 +26,21 @@ Basis: {{what was read; what was run, or "not executed"}}
 ## Open Questions
 ```
 
+Section names and the `Source` / `Requirements` / `Basis` labels in other languages are in [sections.json](../sections.json).
+
 ## Sections
 
 **Summary.** Two to five sentences: what it is, what it does (or what changes), and the most important consequence. To-Be: add a Before / After table of the changed behavior.
 
-**Context.** Where it runs and who calls it: platform, interpreter, trigger, callers, dependencies, constraints from requirements, and what is out of scope. Only what the reader needs for the rest.
+**Context.** Where it runs and who calls it: platform, interpreter, trigger, callers, dependencies, constraints from requirements, and what is out of scope. Only what the reader needs for the rest and cannot get from Summary or Interfaces; leave the section out when that is nothing.
 
 **Interfaces.** Everything that crosses the boundary, in one table: arguments, flags, env vars, stdin, input files, outputs, stdout/stderr, exit codes, artifacts, job outputs, permissions. Columns: name, kind, required/default, meaning, consumer. To-Be: only changed interfaces, with Before and After columns, then "Other interfaces are unchanged."
 
-**Behavior.** What happens under which condition. Usually a table with an ID column (`B1`, `B2`, …): condition, behavior, source link. Include failure paths and side effects: partial writes, skipped steps, what downstream sees. If failure effects need more than the table, add `### Failure effects`. A diagram goes here if one helps.
+**Behavior.** What happens under which condition, for the conditions a reader would get wrong or miss: outcomes that cross a boundary, failure paths, side effects, partial writes, skipped steps, what downstream sees. Usually a table: condition, behavior, source (file link and identifier). A branch whose whole effect is an exit code or message already listed under Interfaces gets no row. Add an ID column (`B1`, `B2`, …) when another section refers to the rows. If failure effects need more than the table, add `### Failure effects`. A diagram goes here if one helps.
 
-**Decisions.** To-Be: each design choice, its reason, and rejected alternatives, briefly. A decision that will outlive this change belongs in an [ADR](adr.md); link it. As-Is: reasons only if they are recorded somewhere; often `None.`
+**Decisions.** To-Be: each design choice, its reason, and rejected alternatives, briefly. A decision that will outlive this change belongs in an [ADR](adr.md); link it. As-Is: only reasons that are recorded somewhere; leave the section out when none are.
 
-**Verification.** Table: check, covers (behavior IDs), expected result, status. Status is `Planned`, `Passed (<where>)` or `Failed (<where>)`. A check is `Passed` only if it was run.
+**Verification.** To-Be: the checks that will show the change works. Table: check, expected result, status. Status is `Planned`, `Passed (<where>)` or `Failed (<where>)`. A check is `Passed` only if it was run. As-Is: leave the section out; the Basis line says what was run.
 
 **Open Questions.** Facts the reader needs that could not be established, and what each one blocks. As-Is: also behavior that looks risky and deserves a decision, stated as an observation. `None.` is a good outcome.
 
